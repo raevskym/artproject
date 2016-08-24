@@ -1,15 +1,16 @@
 from django.conf.urls import url
 
-
 from . import views
 
 
 app_name = 'polls'
 
 urlpatterns = [
-	url(r'^$', views.UserFormView.as_view(), name='register'),
+	url(r'^$', views.LoginFormView.as_view(), name='login'),
 
-	url(r'^questions$', views.IndexView.as_view(), name='index'),
+	url(r'^register/$', views.UserFormView.as_view(), name='reg'),
+
+	url(r'^questions/$', views.IndexView.as_view(), name='index'),
 
     url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
 
