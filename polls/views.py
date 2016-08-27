@@ -105,26 +105,18 @@ class LoginFormView(View):
 
     #process the form data using post
     def post(self, request):
-        form = self.form_class(request.POST)
+        #cleaned and normalized data
+        username = request.POST['username']
+        password = request.POST['password']
 
-        if form.is_valid():
+        #return user object if credentials are correct
+        user = authenticate(username=username, password=password)
 
-            user = form.save(commit=False)
+        if user:
+            print("Not none")
 
-            #cleaned and normalized data
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user.set_password(password)
-            user.save()
+            if user.is_active:
+                login(request, user)
+                return redirect('polls:index')
 
-            #return user object if credentials are correct
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-
-                if user.is_active:
-                    login(request, user)
-                    return redirect('polls:index')
-
-
-        return render(request, self.template_name, {'form': form})
+        return redirect('polls:login')
